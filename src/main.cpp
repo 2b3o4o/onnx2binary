@@ -11,8 +11,8 @@ int main(int argc, char* argv[]) {
 
     // call into python code that parses onnx graph
     py::scoped_interpreter guard{};
-    py::module_ des_module = py::module_::import("deserialize_onnx");
-    py::object result = des_module.attr("deserialize")("onnx_file_string", onnx_path);
+    py::module_ des_module = py::module_::import("onnx_graph.deserialize_onnx");
+    py::object result = des_module.attr("deserialize")(onnx_path);
     assert(result.cast<bool>());    
 
     // that python code calls into onnx_graph.cpp, creating an OnnxGraph object and storing the graph in there

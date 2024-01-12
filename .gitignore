@@ -4,3 +4,5 @@ simple_mnist.onnx
 compile-tvm.ipynb
 src/build
 src/*.so
+main
+*__pycache__

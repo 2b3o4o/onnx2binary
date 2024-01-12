@@ -31,7 +31,7 @@ namespace py = pybind11;
 PYBIND11_MODULE(onnx_graph, m) {
     py::class_<OnnxGraph>(m, "OnnxGraph")
         .def(py::init<>())
-        .def("add_node", &OnnxGraph::add_constant)
-        .def("add_node", &OnnxGraph::add_reshape)
+        .def("add_constant", &OnnxGraph::add_constant)
+        .def("add_reshape", &OnnxGraph::add_reshape);
         // .def("print_nodes", &OnnxGraph::print_nodes);
 }
