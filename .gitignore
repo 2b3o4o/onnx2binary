@@ -6,3 +6,4 @@ src/build
 src/*.so
 main
 *__pycache__
+experimental
