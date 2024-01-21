@@ -3,17 +3,17 @@ from pybind11.setup_helpers import Pybind11Extension, build_ext
 
 ext_modules = [
     Pybind11Extension(
-        "onnx_graph",  # Name of the module
-        ["onnx_graph.cpp"],  # Filename of the C++ source
-        include_dirs=["onnx_graph.hpp"],  # Include directory for the header file
+        "ir_graph",  # Name of the module
+        ["ir_graph.cpp"],  # Filename of the C++ source
+        include_dirs=["ir_graph.hpp"],  # Include directory for the header file
     ),
 ]
 
 setup(
-    name="onnx_graph",
+    name="ir_graph",
     version="1.0",
     author="Luke Weiler",
-    description="Assembles and represents an ONNX graph in a way which is compatible with the project's internal graph representation, and can be cleanly lowered to it.",
+    description="Assembles an intermediate graph representation, which can be interpreted directly or further lowered.",
     ext_modules=ext_modules,
     cmdclass={"build_ext": build_ext},
 )

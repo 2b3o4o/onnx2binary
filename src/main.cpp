@@ -2,7 +2,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/embed.h>
 
-#include "onnx_graph/onnx_graph.h"
+#include "onnx_graph/ir_graph.hpp"
 
 namespace py = pybind11;
 
@@ -11,15 +11,14 @@ int main(int argc, char* argv[]) {
     std::string onnx_path = "../simple_mnist.onnx";
 
     // call into python code that parses serialized onnx
-    // that python code calls into onnx_graph.cpp, creating an OnnxGraph object and storing the graph in there
+    // that python code calls into ir_graph.cpp, creating an IrGraph object and storing the graph in there
     py::scoped_interpreter guard{};
     py::module_ des_module = py::module_::import("onnx_graph.deserialize_onnx");
     py::object result = des_module.attr("deserialize")(onnx_path);
-    OnnxGraph* onnx_graph = result.cast<OnnxGraph*>();
+    IrGraph* ir_graph = result.cast<IrGraph*>();
     // std::cout << "Calling print_nodes from main.cpp...\n";
     // onnx_graph->print_nodes();
 
-    // the onnxgraph gets lowered to my custom IR. probably a function in onnx_graph.cpp does this and produces an IrGraph object
     // interpret the IrGraph (or compile it, eventually)
     return 0;
 }

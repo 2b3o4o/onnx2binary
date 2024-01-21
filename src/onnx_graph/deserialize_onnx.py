@@ -1,11 +1,10 @@
 import onnx
-# import onnx_graph
-from .module import onnx_graph
+from .module import ir_graph
 import logging
 
 logging.basicConfig(level=logging.DEBUG)
 
-def parse_constant(node, cpp_graph: onnx_graph.OnnxGraph):
+def parse_constant(node, cpp_graph: ir_graph.IrGraph):
     # print(node)
     # print("---")
     # print(f"name: {node.name}")
@@ -17,7 +16,7 @@ def parse_constant(node, cpp_graph: onnx_graph.OnnxGraph):
     cpp_graph.add_constant(name=node.name, output_name=node.output, val_arr=tensor)
 
 
-def deserialize(onnx_file_string: str) -> onnx_graph.OnnxGraph:
+def deserialize(onnx_file_string: str) -> ir_graph.IrGraph:
     model_path = onnx_file_string
     model = onnx.load(model_path)
     logging.debug("Model is loaded")
@@ -25,7 +24,7 @@ def deserialize(onnx_file_string: str) -> onnx_graph.OnnxGraph:
     
     graph = model.graph
     
-    cpp_graph = onnx_graph.OnnxGraph.new_OnnxGraph()
+    cpp_graph = ir_graph.IrGraph.new_IrGraph()
     
     for i, node in enumerate(graph.node):
         match node.op_type:
