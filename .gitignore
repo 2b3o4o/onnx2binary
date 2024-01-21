@@ -7,3 +7,5 @@ src/*.so
 main
 *__pycache__
 experimental
+**/build/**
+src/onnx_graph/build/temp.macosx-14-arm64-cpython-311/onnx_graph.o

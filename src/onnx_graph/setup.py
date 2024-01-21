@@ -5,6 +5,7 @@ ext_modules = [
     Pybind11Extension(
         "onnx_graph",  # Name of the module
         ["onnx_graph.cpp"],  # Filename of the C++ source
+        include_dirs=["/path/to/onnx_graph.h"],  # Include directory for the header file
     ),
 ]
 

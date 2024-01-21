@@ -3,28 +3,27 @@
 #include <iostream>
 #include <pybind11/pybind11.h>
 
-class OnnxGraph {
-public:
-    OnnxGraph() {};
-    // void print_nodes() {
-        // std::cout << "Print nodes from C++ code...\n";
-        // for (size_t i = 0; i < nodes.size(); i++) {
-            // std::cout << "Node " << i << ":\n" << nodes[i] << "\n";
-        // }
-    // }
+#include "onnx_graph.h"
 
-    void add_constant() {
-        std::cout << "add_constant called\n";
+void OnnxGraph::add_constant() {
+    nodes.push_back("constant!");
+    std::cout << "add_constant called\n";
+}
+
+void OnnxGraph::add_reshape() {
+    nodes.push_back("reshape!");
+    std::cout << "add_reshape called\n";
+}
+
+void OnnxGraph::print_nodes() {
+    for (size_t i = 0; i < nodes.size(); i++) {
+        std::cout << "Node " << i << ":\n" << nodes[i] << "\n";
     }
+}
 
-    void add_reshape() {
-        std::cout << "add_reshape called\n";
-    }
-
-private:
-    std::vector<std::string> nodes = {};
-};
-
+auto* OnnxGraph::new_OnnxGraph() {
+    return new OnnxGraph();
+}
 
 namespace py = pybind11;
 
@@ -32,6 +31,7 @@ PYBIND11_MODULE(onnx_graph, m) {
     py::class_<OnnxGraph>(m, "OnnxGraph")
         .def(py::init<>())
         .def("add_constant", &OnnxGraph::add_constant)
-        .def("add_reshape", &OnnxGraph::add_reshape);
-        // .def("print_nodes", &OnnxGraph::print_nodes);
+        .def("add_reshape", &OnnxGraph::add_reshape)
+        .def("print_nodes", &OnnxGraph::print_nodes)
+        .def("new_OnnxGraph", &OnnxGraph::new_OnnxGraph);
 }
