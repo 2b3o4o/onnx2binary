@@ -6,10 +6,12 @@
 #include <vector>
 #include <pybind11/pybind11.h>
 
+namespace py = pybind11;
+
 class OnnxGraph {
 public:
     OnnxGraph() {};
-    void add_constant();
+    void add_constant(std::string name, std::string output_name, py::array_t<long> val_arr);
     void add_reshape();
     void print_nodes();
     static auto* new_OnnxGraph();
@@ -19,7 +21,6 @@ private:
     std::vector<std::string> nodes;
 };
 
-namespace py = pybind11;
 
 // PYBIND11_MODULE(onnx_graph, m);
 

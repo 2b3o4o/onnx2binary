@@ -15,7 +15,6 @@ def build():
     cpp_sources = [
         "main.cpp",
         "onnx_graph/onnx_graph.cpp",
-        # "onnx_graph/onnx_graph.h",
     ]
     include_dirs = [
         "/opt/homebrew/opt/pybind11/include/",

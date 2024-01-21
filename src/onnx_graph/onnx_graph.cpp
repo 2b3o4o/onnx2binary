@@ -3,10 +3,10 @@
 #include <iostream>
 #include <pybind11/pybind11.h>
 
-#include "onnx_graph.h"
+#include "onnx_graph.hpp"
 
-void OnnxGraph::add_constant() {
-    nodes.push_back("constant!");
+void OnnxGraph::add_constant(std::string name, std::string output_name, py::array_t<long> val_arr) {
+    nodes.push_back(name);
     std::cout << "add_constant called\n";
 }
 

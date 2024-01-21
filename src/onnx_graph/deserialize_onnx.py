@@ -5,6 +5,18 @@ import logging
 
 logging.basicConfig(level=logging.DEBUG)
 
+def parse_constant(node, cpp_graph: onnx_graph.OnnxGraph):
+    # print(node)
+    # print("---")
+    # print(f"name: {node.name}")
+    # print(f"output: {node.output[0]}")
+    tensor = onnx.numpy_helper.to_array(node.attribute[0].t)
+    print(f"values: {tensor}")
+    assert tensor.dtype == "int64" # TODO: make template to support any type
+    print(f"values type: {tensor.dtype}")
+    cpp_graph.add_constant(name=node.name, output_name=node.output, val_arr=tensor)
+
+
 def deserialize(onnx_file_string: str) -> onnx_graph.OnnxGraph:
     model_path = onnx_file_string
     model = onnx.load(model_path)
@@ -18,7 +30,7 @@ def deserialize(onnx_file_string: str) -> onnx_graph.OnnxGraph:
     for i, node in enumerate(graph.node):
         match node.op_type:
             case "Constant":
-                cpp_graph.add_constant()
+                parse_constant(node, cpp_graph)
             case "Reshape":
                 cpp_graph.add_reshape()
             case _:
