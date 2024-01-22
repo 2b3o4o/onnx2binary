@@ -2,7 +2,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/embed.h>
 
-#include "onnx_graph/ir_graph.hpp"
+#include "ir_graph/ir_graph.hpp"
 
 namespace py = pybind11;
 
@@ -16,8 +16,8 @@ int main(int argc, char* argv[]) {
     py::module_ des_module = py::module_::import("onnx_graph.deserialize_onnx");
     py::object result = des_module.attr("deserialize")(onnx_path);
     IrGraph* ir_graph = result.cast<IrGraph*>();
-    // std::cout << "Calling print_nodes from main.cpp...\n";
-    // onnx_graph->print_nodes();
+    std::cout << "Calling print_nodes from main.cpp...\n";
+    ir_graph->print_nodes();
 
     // interpret the IrGraph (or compile it, eventually)
     return 0;

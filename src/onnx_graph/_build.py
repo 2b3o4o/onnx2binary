@@ -1,21 +1,22 @@
 import subprocess
 import os
+import shutil
 
 def build():
-    try:
-        wd = os.path.dirname(os.path.realpath(__file__))
-        module_dir = os.path.join(wd, "module")
-        os.makedirs(module_dir, exist_ok=True)
-        open(os.path.join(module_dir, "__init__.py"), 'a').close()
+    wd = os.path.dirname(os.path.realpath(__file__))
+    module_dir = os.path.join(wd, "module")
 
-        commands = [
-            ["python3", "setup.py", "build_ext", "--build-lib", "module"],
-        ]
-        for command in commands:
-            subprocess.run(command, cwd=wd)
+    # Copy ../ir_graph/module to ./module
+    src_module_dir = os.path.join(wd, "..", "ir_graph", "module")
+    if os.path.exists(module_dir):
+        shutil.rmtree(module_dir)
+    shutil.copytree(src_module_dir, module_dir)
 
-    except subprocess.CalledProcessError:
-        print("Compilation failed.")
+    # commands = [
+        # ["python3", "setup.py", "build_ext", "--build-lib", "module"],
+    # ]
+    # for command in commands:
+        # subprocess.run(command, cwd=wd)
 
 if __name__ == "__main__":
     build()

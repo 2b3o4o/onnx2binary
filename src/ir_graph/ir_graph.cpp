@@ -1,4 +1,3 @@
-
 #include "ir_graph.hpp"
 
 void IrGraph::add_constant(std::string name, std::string output_name, py::array_t<long> val_arr) {
@@ -24,7 +23,7 @@ auto* IrGraph::new_IrGraph() {
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(onnx_graph, m) {
+PYBIND11_MODULE(ir_graph, m) {
     py::class_<IrGraph>(m, "IrGraph")
         .def(py::init<>())
         .def("add_constant", &IrGraph::add_constant)
