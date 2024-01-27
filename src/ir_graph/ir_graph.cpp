@@ -28,14 +28,6 @@ auto IrGraph::new_IrGraph() {
 }
 
 template <typename T>
-void IrGraph::tpv(py::array_t<T>& val_arr) {
-    (void)val_arr;
-}
-
-
-
-
-template <typename T>
 std::vector<int> Tensor<T>::arr_pos_to_tensor_pos(int arr_pos) {
     auto output = std::vector<int>(dims->size());
     for (int dimIndex = dims->size(); dimIndex > 0; dimIndex--) {
@@ -90,6 +82,5 @@ PYBIND11_MODULE(ir_graph, m) {
         .def("add_constant__long", &IrGraph::add_constant<long>)
         .def("add_reshape", &IrGraph::add_reshape)
         .def("print_nodes", &IrGraph::print_nodes)
-        .def("new_IrGraph", &IrGraph::new_IrGraph)
-        .def("tpv", &IrGraph::tpv<long>);
+        .def("new_IrGraph", &IrGraph::new_IrGraph);
 }

@@ -45,8 +45,6 @@ public:
     void add_constant(std::string name, std::string output_name, py::array_t<T>& val_arr, std::vector<int> arr_dims);
     void add_reshape();
     void print_nodes();
-    template <typename T>
-    void tpv(py::array_t<T>& val_arr);
     static auto new_IrGraph();
     static void hello_from_header() { std::cout << "hello!\n"; };
 
