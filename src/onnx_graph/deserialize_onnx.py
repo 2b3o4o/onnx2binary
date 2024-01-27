@@ -1,19 +1,23 @@
 import onnx
 from .module import ir_graph
 import logging
+import numpy as np
 
 logging.basicConfig(level=logging.DEBUG)
 
 def parse_constant(node, cpp_graph: ir_graph.IrGraph):
-    # print(node)
-    # print("---")
-    # print(f"name: {node.name}")
-    # print(f"output: {node.output[0]}")
     tensor = onnx.numpy_helper.to_array(node.attribute[0].t)
-    print(f"values: {tensor}")
-    assert tensor.dtype == "int64" # TODO: make template to support any type
-    print(f"values type: {tensor.dtype}")
-    cpp_graph.add_constant(name=node.name, output_name=node.output, val_arr=tensor)
+    tensor = np.ascontiguousarray(tensor) # makes sure all elements are contiguous in memory
+
+    dims = list(node.attribute[0].t.dims)
+
+    match tensor.dtype:
+        case "int64":
+            add_constant = cpp_graph.add_constant__long
+        case _:
+            assert False and "Tried to parse_constant with unsupported tensor type"
+
+    add_constant(node.name, node.output[0], tensor, dims)
 
 
 def deserialize(onnx_file_string: str) -> ir_graph.IrGraph:
