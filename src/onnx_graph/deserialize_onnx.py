@@ -13,7 +13,7 @@ def parse_constant(node, cpp_graph: ir_graph.IrGraph):
 
     match tensor.dtype:
         case "int64":
-            add_constant = cpp_graph.add_constant__long
+            add_constant = cpp_graph.add_constant__int64
         case _:
             assert False and "Tried to parse_constant with unsupported tensor type"
 

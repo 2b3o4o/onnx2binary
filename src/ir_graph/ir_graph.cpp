@@ -1,6 +1,7 @@
 #include <new>
 #include <cassert>
 #include <cstring>
+#include <cstdint>
 
 #include "ir_graph.hpp"
 
@@ -23,7 +24,6 @@ void IrGraph::print_nodes() {
 }
 
 auto IrGraph::new_IrGraph() {
-    // return new IrGraph();
     return std::make_unique<IrGraph>();
 }
 
@@ -79,7 +79,7 @@ namespace py = pybind11;
 PYBIND11_MODULE(ir_graph, m) {
     py::class_<IrGraph>(m, "IrGraph")
         .def(py::init<>())
-        .def("add_constant__long", &IrGraph::add_constant<long>)
+        .def("add_constant__int64", &IrGraph::add_constant<int64_t>)
         .def("add_reshape", &IrGraph::add_reshape)
         .def("print_nodes", &IrGraph::print_nodes)
         .def("new_IrGraph", &IrGraph::new_IrGraph);

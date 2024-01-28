@@ -1,3 +1,4 @@
+#include <memory>
 #include <string>
 #include <pybind11/pybind11.h>
 #include <pybind11/embed.h>
@@ -15,7 +16,7 @@ int main(int argc, char* argv[]) {
     py::scoped_interpreter guard{};
     py::module_ des_module = py::module_::import("onnx_graph.deserialize_onnx");
     py::object result = des_module.attr("deserialize")(onnx_path);
-    IrGraph* ir_graph = result.cast<IrGraph*>();
+    auto ir_graph = result.cast<std::unique_ptr<IrGraph>>();
     std::cout << "Calling print_nodes from main.cpp...\n";
     ir_graph->print_nodes();
 
