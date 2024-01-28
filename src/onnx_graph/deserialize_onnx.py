@@ -19,6 +19,16 @@ def parse_constant(node, cpp_graph: ir_graph.IrGraph):
 
     add_constant(node.name, node.output[0], tensor, dims)
 
+def parse_reshape(node, cpp_graph: ir_graph.IrGraph):
+    inputs = node.input
+    output = node.output[0]
+    allowzero = False
+    if node.attribute:
+        assert node.attribute[0].name == "allowzero"
+        if node.attribute[0].i == 1:
+            allowzero = True
+    
+    cpp_graph.add_reshape(inputs, output, allowzero)
 
 def deserialize(onnx_file_string: str) -> ir_graph.IrGraph:
     model_path = onnx_file_string
@@ -35,7 +45,7 @@ def deserialize(onnx_file_string: str) -> ir_graph.IrGraph:
             case "Constant":
                 parse_constant(node, cpp_graph)
             case "Reshape":
-                cpp_graph.add_reshape()
+                parse_reshape(node, cpp_graph)
             case _:
                 logging.debug(f"Encountered an ONNX node of an unsupported type: Node {i}: {node.op_type}\n  Inputs:{node.input}  Outputs:{node.output}")
     return cpp_graph

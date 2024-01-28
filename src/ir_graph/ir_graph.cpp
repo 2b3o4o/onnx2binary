@@ -1,7 +1,4 @@
-#include <new>
-#include <cassert>
 #include <cstring>
-#include <cstdint>
 
 #include "ir_graph.hpp"
 
@@ -12,14 +9,15 @@ void IrGraph::add_constant(std::string name, std::string output_name, py::array_
     std::cout << "add_constant called\n";
 }
 
-void IrGraph::add_reshape() {
-    // nodes.push_back("reshape!");
+void IrGraph::add_reshape(std::vector<std::string>& inputs, std::string& output, bool allowzero) {
+    std::unique_ptr<IrGraphNode> tensor = std::make_unique<Reshape>(inputs, output, allowzero);
+    nodes.push_back(std::move(tensor));
     std::cout << "add_reshape called\n";
 }
 
 void IrGraph::print_nodes() {
     for (size_t i = 0; i < nodes.size(); i++) {
-        std::cout << "Node " << i << ":\n" << "Name: " << nodes[i]->name() << "\n" << "Type: " << nodes[i]->type() << "\n";
+        std::cout << "Node " << i << ":\n" << "Type: " << nodes[i]->type() << "\n";
     }
 }
 
@@ -52,7 +50,7 @@ int Tensor<T>::tensor_pos_to_arr_pos(std::vector<int>& tensor_pos) {
 
 template <typename T>
 Tensor<T>::Tensor(std::string name, std::unique_ptr<std::vector<int>> dims, py::array_t<T>& np_array)
-    : IrGraphNode(name), dims(std::move(dims)), array_size(1) {
+    : dims(std::move(dims)), array_size(1), m_name(name) {
     assert(dims->size() > 0); // TODO: actually 0 elem dims is valid, I just don't support it yet. see ONNX docs
     // assert(np_array.check()); // check for contiguity of elements, which is assumed by the copy mechanism below
     for (int dim : *(this->dims)) {
@@ -69,7 +67,7 @@ Tensor<T>::Tensor(std::string name, std::unique_ptr<std::vector<int>> dims, py::
 }
 
 template <typename T>
-Tensor<T>::Tensor(const Tensor<T>& other) : dims(other.dims), array_size(other.array_size), values(new T[other.array_size]) {
+Tensor<T>::Tensor(const Tensor<T>& other) : dims(other.dims), array_size(other.array_size), values(new T[other.array_size]), m_name(other.name()) {
     std::copy(other.values, other.values + array_size, values);
 }
 
